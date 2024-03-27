@@ -1,0 +1,49 @@
+@media only screen and (max-width: 981px) {
+    .image-single-post .post-content .post-title {
+        width: 90%;
+        font-size: 2rem;
+    }
+
+    .image-single-post .post-content .post-description {
+        width: 90% !important;
+    }
+
+    .section-div {
+        margin: 5rem 0 8rem 0;
+    }
+
+    .contact-content .contact-header p {
+       width: 100%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .image-single-post .post-content .post-title {
+        width: 100%;
+        font-size: 1.5rem;
+    }
+
+    .image-single-post .post-content .post-description {
+        width: 100%;
+    }
+
+    .about-page .about-title p {
+        width: 100%;
+    }
+
+    .nav .mnue li a {
+        font-size: 1rem;
+
+    }
+
+    .contact-content .contact-header h1 {
+        text-align: center;
+        padding: 0 0;
+    }
+
+    .contact-content .contact-header p {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+}
