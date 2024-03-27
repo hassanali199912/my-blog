@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function PostCardData({ data }) {
   const navegate = useNavigate();
   const handleClick = () => {
-    navegate(`/post/${data.id}`);
+    navegate(`/post`);
   };
   return (
     <>
