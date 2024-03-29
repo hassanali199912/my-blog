@@ -8,11 +8,12 @@ import { getUserDataApiFun } from "../store/Slicers/users/getUserSlicers";
 import Placeholder from "react-bootstrap/Placeholder";
 import UserDataLoading from "./components/profile-components/UserDataLoading";
 import UserWritesLoading from "./components/profile-components/UserWritesLoading";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { loading, data, error } = useSelector((s) => s.getUserSlicers);
   const dispatch = useDispatch();
-
+  const navigator = useNavigate();
   const [userData, setUserData] = useState();
   const [userPosts,setUserPosts] = useState([]);
 
@@ -45,7 +46,7 @@ export default function Profile() {
   };
 
   const onFinshed =()=>{
-    window.location.reload(); //reload the page
+    navigator('/profile') //reload the page
   }
 
   useEffect(() => {
