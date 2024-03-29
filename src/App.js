@@ -61,13 +61,13 @@ function App() {
   return (
     <>
       <Nav />
-      <Wrapper>
+      {/* <Wrapper> */}
         <Routes>
           {routes.map((item, index) => (
             <Route key={index} exact path={item.path} element={item.element} />
           ))}
         </Routes>
-      </Wrapper>
+      {/* </Wrapper> */}
       <Footer />
     </>
   );

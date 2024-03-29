@@ -1,6 +1,57 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { regesterApiFun } from "../store/Slicers/users/createUserSlicers";
+import CustomLoader from "./components/ui/CustomLoader";
 
 export default function Singup() {
+  const { loading, user, error } = useSelector((s) => s.createUserSlicers);
+  const dispatch = useDispatch();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [nameErrorMessage, setNameErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userCrdintional = {
+      name,
+      email,
+      password,
+    };
+    dispatch(regesterApiFun(userCrdintional))
+      .then((result) => {
+        setNameErrorMessage("");
+        setEmailErrorMessage("");
+        setPasswordErrorMessage("");
+        if (result.payload.message === "User created successfully") {
+          localStorage.setItem("user", JSON.stringify(result.payload.data));
+          window.location.href = "/";
+        } else {
+          if (result.payload.message === "Invaild User Data") {
+            result.payload.data.forEach((item) => {
+              if (item.path === "name") {
+                setNameErrorMessage(item.msg);
+              } else if (item.path === "email") {
+                setEmailErrorMessage(item.msg);
+              } else if (item.path === "password") {
+                setPasswordErrorMessage(item.msg);
+              } else {
+                console.log(item);
+              }
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("this is error", err);
+      });
+  };
+
   return (
     <>
       <section className="section-div login-page">
@@ -13,37 +64,70 @@ export default function Singup() {
             />
             <h1>welcome</h1>
             <h3>Create An Account To Share Your Knowledge</h3>
-            <form>
-              <div className="form-group">
+            <form onSubmit={handleSubmit}>
+              <div className={`form-group  ${nameErrorMessage ? "error" : ""}`}>
                 <label htmlFor="name">Name</label>
-                <input type="text" className="form-control" id="name" 
+                <input
+                required
+                  type="text"
+                  className="form-control"
+                  id="name"
                   placeholder="Enter name..."
-                 />
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                />
+                <div className="error-feild">
+                  <p>{nameErrorMessage}</p>
+                </div>
               </div>
-              <div className="form-group">
+              <div
+                className={`form-group  ${emailErrorMessage ? "error" : ""}`}
+              >
                 <label htmlFor="email">Email address</label>
                 <input
+                required
                   placeholder="Enter email..."
                   type="email"
                   className="form-control"
                   id="email"
-                  aria-describedby="emailHelp"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
+                <div className="error-feild">
+                  <p>{emailErrorMessage}</p>
+                </div>
               </div>
-              <div className="form-group">
+              <div
+                className={`form-group  ${passwordErrorMessage ? "error" : ""}`}
+              >
                 <label htmlFor="password">Password</label>
                 <input
+                required
                   placeholder="Enter password..."
                   type="password"
                   className="form-control"
                   id="password"
-                  aria-describedby="passwordHelp"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
+                <div className="error-feild">
+                  <p>{passwordErrorMessage}</p>
+                </div>
               </div>
               <div className="form-group">
-                <button type="submit" className="btn btn-primary">
-                  Singup
-                </button>
+                {loading ? (
+                  <>
+                    <button disabled className="btn btn-primary">
+                      <CustomLoader />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button type="submit" className="btn btn-primary">
+                      Singup
+                    </button>
+                  </>
+                )}
               </div>
               <p className="m-4 text-center">
                 Already have an account? <Link to="/login">Login</Link>

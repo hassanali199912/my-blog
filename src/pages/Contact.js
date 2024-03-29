@@ -1,3 +1,4 @@
+import Wrapper from "./components/Wrapper";
 import ContactBoxCard from "./components/ui/ContactBoxCard";
 
 export default function Contact() {
@@ -27,57 +28,60 @@ export default function Contact() {
   return (
     <>
       <section className="section-div contact">
-        <div className="row">
-          <div className="col-12 contact-content">
-            <div className="contact-header">
-              <h1 className="contact-title">Let's get in touch!</h1>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took
-              </p>
-            </div>
-            <div className="row contact-cards">
-              <ContactBoxCard
-                title={"Linkedin"}
-                description={"Click To Visit My Linkedin"}
-                icon={"fa-brands fa-linkedin-in"}
-                onClick={goToLinkedin}
-              />
-              <ContactBoxCard
-                title={"Facebook"}
-                description={"Click To Visit My Facebook"}
-                icon={"fa-brands fa-facebook-f"}
-                onClick={goToFacebook}
-              />
-              <ContactBoxCard
-                title={"Github"}
-                description={"Click To Visit My Github"}
-                icon={"fa-brands fa-github"}
-                onClick={goToFGithub}
-              />
+        <Wrapper>
+          <div className="row">
+            <div className="col-12 contact-content">
+              <div className="contact-header">
+                <h1 className="contact-title">Let's get in touch!</h1>
+                <p>
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took
+                </p>
+              </div>
+              <div className="row contact-cards">
+                <ContactBoxCard
+                  title={"Linkedin"}
+                  description={"Click To Visit My Linkedin"}
+                  icon={"fa-brands fa-linkedin-in"}
+                  onClick={goToLinkedin}
+                />
+                <ContactBoxCard
+                  title={"Facebook"}
+                  description={"Click To Visit My Facebook"}
+                  icon={"fa-brands fa-facebook-f"}
+                  onClick={goToFacebook}
+                />
+                <ContactBoxCard
+                  title={"Github"}
+                  description={"Click To Visit My Github"}
+                  icon={"fa-brands fa-github"}
+                  onClick={goToFGithub}
+                />
 
-              <ContactBoxCard
-                title={"Email"}
-                description={"email : hassanalihassan1203@gmail.com"}
-                icon={"fa-regular fa-envelope"}
-                onClick={goToMyemail}
-              />
-              <ContactBoxCard
-                title={"Phone"}
-                description={"my mobile : 01553880080"}
-                icon={"fa-solid fa-phone"}
-                onClick={goToWhatsapp}
-              />
-              <ContactBoxCard
-                title={"CV"}
-                description={"download my cv"}
-                icon={"fa-regular fa-file"}
-                onClick={goToMyCv}
-              />
+                <ContactBoxCard
+                  title={"Email"}
+                  description={"email : hassanalihassan1203@gmail.com"}
+                  icon={"fa-regular fa-envelope"}
+                  onClick={goToMyemail}
+                />
+                <ContactBoxCard
+                  title={"Phone"}
+                  description={"my mobile : 01553880080"}
+                  icon={"fa-solid fa-phone"}
+                  onClick={goToWhatsapp}
+                />
+                <ContactBoxCard
+                  title={"CV"}
+                  description={"download my cv"}
+                  icon={"fa-regular fa-file"}
+                  onClick={goToMyCv}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </Wrapper>
       </section>
     </>
   );

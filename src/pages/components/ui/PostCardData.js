@@ -38,7 +38,7 @@ export default function PostCardData({ data }) {
                 <span className="tooltip-text">comments</span>
               </li>
               <li className="review-item">
-                <i class="fa-regular fa-star"></i>45
+                <i className="fa-regular fa-star"></i>45
                 <span className="tooltip-text">review</span>
               </li>
             </ul>

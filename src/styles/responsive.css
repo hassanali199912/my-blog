@@ -13,7 +13,22 @@
     }
 
     .contact-content .contact-header p {
-       width: 100%;
+        width: 100%;
+    }
+
+    .confromationAlert-box {
+        padding: 1rem 1rem;
+    
+    }
+    .confromationAlert-box h4 {
+        font-size: 1.3rem;
+        padding: 2rem 0 0 0;
+    }
+    .confromationAlert-box p {
+        width: 100%;
+        font-size: 0.9rem;
+
+
     }
 }
 

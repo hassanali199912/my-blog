@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function ActionMenue() {
+export default function ActionMenue({handleEdit,handelView,handleDelete}) {
   const [show, setShow] = useState(false);
 
   return (
@@ -19,13 +19,13 @@ export default function ActionMenue() {
           style={{ display: `${show ? "block" : "none"}` }}
           className="action-menue"
         >
-          <li>
+          <li onClick={handleEdit}>
             <i className="fa fa-edit" /> edit
           </li>
-          <li>
+          <li onClick={handelView}>
             <i className="fa-solid fa-eye" /> View
           </li>
-          <li>
+          <li onClick={handleDelete}>
             <i className="fa fa-trash-can" /> Delete
           </li>
         </ul>
