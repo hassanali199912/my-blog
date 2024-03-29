@@ -8,14 +8,12 @@ import { getUserDataApiFun } from "../store/Slicers/users/getUserSlicers";
 import Placeholder from "react-bootstrap/Placeholder";
 import UserDataLoading from "./components/profile-components/UserDataLoading";
 import UserWritesLoading from "./components/profile-components/UserWritesLoading";
-import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { loading, data, error } = useSelector((s) => s.getUserSlicers);
   const dispatch = useDispatch();
-  const navigator = useNavigate();
   const [userData, setUserData] = useState();
-  const [userPosts,setUserPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
 
   const handleMenueClick = (index) => {
     const alldiv = document.querySelectorAll(".card-profile-2");
@@ -31,7 +29,7 @@ export default function Profile() {
   };
 
   const getUserData = async () => {
-    //setUserData(null);
+    setUserData(null);
     dispatch(getUserDataApiFun())
       .then((res) => {
         if (res.payload.message === "User fetched successfully") {
@@ -45,9 +43,10 @@ export default function Profile() {
       });
   };
 
-  const onFinshed =()=>{
-    navigator('/profile') //reload the page
-  }
+  const onFinshed = () => {
+    getUserData();
+    handleMenueClick(0);
+  };
 
   useEffect(() => {
     getUserData();
@@ -86,7 +85,7 @@ export default function Profile() {
                 <h2 className="manue-title">Manue</h2>
                 <ul className="porfile-options-menue">
                   <li onClick={() => handleMenueClick(0)}>
-                    <a href="#" onClick={() => handleMenueClick(0)}>
+                    <a  onClick={() => handleMenueClick(0)}>
                       <i
                         onClick={() => handleMenueClick(0)}
                         className="fa fa-user"
@@ -95,7 +94,7 @@ export default function Profile() {
                     </a>
                   </li>
                   <li onClick={() => handleMenueClick(1)}>
-                    <a href="#" onClick={() => handleMenueClick(1)}>
+                    <a  onClick={() => handleMenueClick(1)}>
                       <i
                         onClick={() => handleMenueClick(1)}
                         className="fa-solid fa-newspaper"
@@ -104,7 +103,7 @@ export default function Profile() {
                     </a>
                   </li>
                   <li onClick={() => handleMenueClick(2)}>
-                    <a href="#" onClick={() => handleMenueClick(2)}>
+                    <a  onClick={() => handleMenueClick(2)}>
                       <i
                         className="fa fa-plus"
                         onClick={() => handleMenueClick(2)}
