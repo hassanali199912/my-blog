@@ -18,7 +18,7 @@ export default function Nav() {
       const foundUser = JSON.parse(userToken);
       const decoded = jwtDecode(foundUser.token);
       const expireDate = decoded.exp * 1000;
-       foundUser.token && checkTokenAndDeleteUser(expireDate);
+      // foundUser.token && checkTokenAndDeleteUser(expireDate);
       setUser(foundUser);
     }
   }, []);
