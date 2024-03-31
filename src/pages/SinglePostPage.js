@@ -72,7 +72,6 @@ export default function SinglePostPage() {
   const toggleLike = async () => {
     if (userData) {
       dispatch(toggleLikesApiFun(id)).then((res) => {
-        console.log(res);
         if (res.payload.status === "success") {
           getPostLikes(id);
         }
@@ -86,7 +85,6 @@ export default function SinglePostPage() {
     const token = localStorage.getItem("user");
     if (token) {
       dispatch(getUserDataApiFun()).then((res) => {
-        console.log(res);
         if (res.payload.status === "success") {
           setUserData(res.payload.data.user);
         }

@@ -61,7 +61,6 @@ export default function UserData({ userData, onFinshed }) {
     };
     dispatch(updateUserDataApiFun(data))
       .then((res) => {
-        console.log(res.payload);
         if (res.payload.status === "success") {
           setShowNameBtn(false);
           setAlertValue({

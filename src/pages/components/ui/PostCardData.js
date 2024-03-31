@@ -7,7 +7,6 @@ export default function PostCardData({ data }) {
   };
 
   const formateDate = (date) => {
-    console.log(date);
     const d = new Date(date);
     const arr = d.toString().split(" ");
     return `${arr[0]} , ${arr[1]} , ${arr[2]}, ${arr[3]}`;

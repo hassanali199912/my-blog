@@ -13,12 +13,10 @@ export default function Nav() {
 
   useEffect(() => {
     const userToken = localStorage.getItem("user");
-    console.log(userToken);
     if (userToken) {
       const foundUser = JSON.parse(userToken);
       const decoded = jwtDecode(foundUser.token);
       const expireDate = decoded.exp * 1000;
-      console.log(foundUser.expiresIn);
       foundUser.token && checkTokenAndDeleteUser(foundUser.expiresIn);
       setUser(foundUser);
     }

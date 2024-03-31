@@ -34,9 +34,7 @@ export default function Home() {
     if (value.value === "all") {
       setPosts(postTemp);
     } else {
-      console.log(postTemp);
       const newArr = postTemp.filter((post) => post.caterogry === value.value);
-      console.log(newArr);
       setPosts(newArr);
     }
   };

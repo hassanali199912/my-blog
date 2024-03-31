@@ -54,7 +54,6 @@ export default function Profile() {
   const handleChangeImageProfile = (e) => {
     setChangeProfileImagSelsctor(false);
     const imageUrl = e.target.src;
-    console.log(imageUrl);
     const data = {
       feild: "image",
       value: imageUrl,

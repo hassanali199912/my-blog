@@ -25,7 +25,6 @@ export default function UserWrites({ postes, onFinshed }) {
   const [postData, setPostData] = useState();
 
   const onAction = (postId, action) => {
-    console.log(`this is post action valuse  ${action} , ${postId}`);
     if (action === "delete") {
       setShow(true);
       setPostId(postId);

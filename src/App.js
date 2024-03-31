@@ -20,6 +20,7 @@ import SinglePostPage from "./pages/SinglePostPage";
 import Singup from "./pages/Singup";
 import Profile from "./pages/Profile";
 import { useEffect } from "react";
+import { Checklogin } from "./services/LogoutToken";
 
 const routes = [
   {
@@ -57,16 +58,20 @@ const routes = [
 ];
 
 function App() {
- 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    Checklogin();
+  }, []);
+
   return (
     <>
       <Nav />
       {/* <Wrapper> */}
-        <Routes>
-          {routes.map((item, index) => (
-            <Route key={index} exact path={item.path} element={item.element} />
-          ))}
-        </Routes>
+      <Routes>
+        {routes.map((item, index) => (
+          <Route key={index} exact path={item.path} element={item.element} />
+        ))}
+      </Routes>
       {/* </Wrapper> */}
       <Footer />
     </>

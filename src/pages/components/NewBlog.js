@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 export default function NewBlog() {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     const response = fetch("http://localhost:3000/posts", {
       method: "POST",
       body: JSON.stringify(data),
