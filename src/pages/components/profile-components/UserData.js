@@ -89,7 +89,7 @@ export default function UserData({ userData, onFinshed }) {
 
   return (
     <>
-      <div className="card-profile-2 user-data">
+      <div className="card-profile-2 user-data active">
         <h1> Profile Data</h1>
         <p>this is profile data for the user </p>
         <form className="form-profile" onSubmit={handleChangeName}>

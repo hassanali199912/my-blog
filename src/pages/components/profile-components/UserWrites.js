@@ -4,11 +4,14 @@ import ConfromationAlert from "../ui/ConfromationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePostApiFun } from "../../../store/Slicers/posts/deletePostSlicers";
 import Alart from "../ui/Alart";
-import ArticalTRLoading from "../ui/ArticalTRLoading";
+import ArticalTRLoading from "../loadings/ArticalTRLoading";
+import { useNavigate } from "react-router-dom";
+import PostUpdateForm from "../ui/PostUpdateForm";
 
 export default function UserWrites({ postes, onFinshed }) {
   const { loading, data, error } = useSelector((e) => e.deletePostSlicers);
   const dispatch = useDispatch();
+  const navegator = useNavigate();
 
   const [userPosts, setUserPosts] = useState([]);
   const [alertValue, setAlertValue] = useState({
@@ -19,12 +22,24 @@ export default function UserWrites({ postes, onFinshed }) {
 
   const [show, setShow] = useState(false);
   const [postId, setPostId] = useState("");
+  const [postData, setPostData] = useState();
 
   const onAction = (postId, action) => {
     console.log(`this is post action valuse  ${action} , ${postId}`);
     if (action === "delete") {
       setShow(true);
       setPostId(postId);
+    } else if (action === "edit") {
+      setPostData(undefined);
+      userPosts.map((post) => {
+        if (post._id === postId) {
+          setTimeout(() => {
+            setPostData(post);
+          }, 500);
+        }
+      });
+    } else {
+      navegator(`/post/${postId}`);
     }
   };
 
@@ -102,6 +117,13 @@ export default function UserWrites({ postes, onFinshed }) {
             )}
           </div>
         </div>
+        {postData && (
+          <PostUpdateForm
+            postData={postData}
+            onFinshed={onFinshed}
+            onCancel={() => setPostData(undefined)}
+          />
+        )}
       </div>
 
       {alertValue.show && (

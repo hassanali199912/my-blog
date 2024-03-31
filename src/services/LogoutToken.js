@@ -1,13 +1,8 @@
-
-
 function checkTokenAndDeleteUser(expireDate) {
-  if (Date.now() > expireDate) {
+  setTimeout(() => {
     localStorage.removeItem("user");
     window.location.href = "/";
-  }
-  setInterval(() => {
-    checkTokenAndDeleteUser(expireDate);
-  }, 1000);
+  }, expireDate);
 }
 
 export default checkTokenAndDeleteUser;

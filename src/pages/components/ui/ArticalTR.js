@@ -9,7 +9,21 @@ export default function ArticalTR({ index, post, onAction }) {
     const d = new Date(date);
     return `${d.toUTCString()} `;
   };
+  const calcAverveReview = (reviews) => {
+    let sum = 0;
+    reviews.forEach((review) => {
+      sum += review;
+    });
+    const revArra = (sum / reviews.length).toFixed(1).split(".");
+    let rev = "";
+    if (revArra[1] !== "0") {
+      rev = revArra[0] + "." + revArra[1];
+    } else {
+      rev = revArra[0];
+    }
 
+    return rev ? rev : 0;
+  };
 
   return (
     <>
@@ -25,11 +39,11 @@ export default function ArticalTR({ index, post, onAction }) {
         </td>
         <td>
           <div className="td-data-reviews">
-            {post.revirews ? (
+            {post.reviews ? (
               <>
                 <span>
                   <i className="fa fa-star"></i>
-                  {post.revirews}
+                  {calcAverveReview(post.reviews)}
                 </span>
               </>
             ) : (

@@ -1,5 +1,5 @@
 import { Placeholder } from "react-bootstrap";
-import ActionMenue from "./ActionMenue";
+import ActionMenue from "../ui/ActionMenue";
 
 export default function ArticalTRLoading() {
   return (

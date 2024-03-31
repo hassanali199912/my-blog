@@ -1,5 +1,4 @@
-import ArticalTR from "../ui/ArticalTR";
-import ArticalTRLoading from "../ui/ArticalTRLoading";
+import ArticalTRLoading from "./ArticalTRLoading";
 
 export default function UserWritesLoading() {
   return (

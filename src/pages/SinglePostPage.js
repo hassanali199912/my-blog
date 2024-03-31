@@ -1,166 +1,269 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CommentComponent from "./components/ui/CommentComponent";
 import Wrapper from "./components/Wrapper";
+import { useDispatch, useSelector } from "react-redux";
+import { getSinglePostApiFun } from "../store/Slicers/posts/getSinglePostSlicers";
+import { Button, Modal, Placeholder } from "react-bootstrap";
+import SinglePostLoading from "./components/loadings/SinglePostLoading";
+import CommentComponentLoading from "./components/loadings/CommentComponentLoading";
+import { getSinglePostCommentApiFun } from "../store/Slicers/comments/getAllCommentSlicers";
+import CommentFrom from "./components/ui/CommentFrom";
+import { getPostLikesApiFun } from "../store/Slicers/likes/getAllLikesSlicers";
+import { toggleLikesApiFun } from "../store/Slicers/likes/toggelLikesSlicers";
+import CustomLoader from "./components/ui/CustomLoader";
+import { getUserDataApiFun } from "../store/Slicers/users/getUserSlicers";
 
 export default function SinglePostPage() {
   const { id } = useParams();
-  const [post, setPost] = useState({});
 
-  const handleStarClick = (index) => {
-    const allStart = document.querySelectorAll(".fa-star");
-    allStart.forEach((star) => {
-      star.classList.remove("active");
-    });
+  // #region Selectors
+  const { loading, data, error } = useSelector((e) => e.getSinglePostSlicers);
+  const {
+    loading: commnetLoading,
+    data: commnetData,
+    error: commnetError,
+  } = useSelector((e) => e.getAllCommentSlicers);
 
-    [...Array(index)].map((star, index) => {
-      allStart[index].classList.add("active");
-    });
+  const {
+    loading: likesLoading,
+    data: likesData,
+    error: likesError,
+  } = useSelector((e) => e.getAllLikesSlicers);
+
+  const {
+    loading: toggleLikesLoading,
+    data: toggleLikesData,
+    error: toggleLikesError,
+  } = useSelector((e) => e.toggelLikesSlicers);
+  // #endregion Selectors
+
+  const dispatch = useDispatch();
+
+  // #region States
+
+  const [post, setPost] = useState();
+  const [comment, setComment] = useState();
+  const [likes, setLikes] = useState();
+  const [userData, setUserData] = useState();
+  const [bottonActive, setButtonActive] = useState(false);
+  const [show, setShow] = useState(false);
+  // #endregion States
+
+  //#region Fuctions
+
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(date).toLocaleDateString(undefined, options);
   };
 
+  const getSinglePost = async () => {
+    dispatch(getSinglePostApiFun(id));
+  };
+
+  const getPostCommnets = async () => {
+    dispatch(getSinglePostCommentApiFun(id));
+  };
+
+  const getPostLikes = async () => {
+    dispatch(getPostLikesApiFun(id));
+  };
+
+  const toggleLike = async () => {
+    if (userData) {
+      dispatch(toggleLikesApiFun(id)).then((res) => {
+        console.log(res);
+        if (res.payload.status === "success") {
+          getPostLikes(id);
+        }
+      });
+    } else {
+      setShow(true);
+    }
+  };
+
+  const getUserData = async () => {
+    const token = localStorage.getItem("user");
+    if (token) {
+      dispatch(getUserDataApiFun()).then((res) => {
+        console.log(res);
+        if (res.payload.status === "success") {
+          setUserData(res.payload.data.user);
+        }
+      });
+    }
+  };
+  //#endregion Fuctions
+
+  // #region useEffects
+
+  useEffect(() => {
+    getSinglePost();
+    getUserData();
+  }, []);
+
+  useEffect(() => {
+    data && setPost(data.data);
+    getPostCommnets();
+    getPostLikes();
+  }, [data]);
+
+  useEffect(() => {
+    commnetData && setComment(commnetData.data);
+  }, [commnetData]);
+
+  useEffect(() => {
+    if (likesData) {
+      setLikes(likesData.data);
+      if (likesData.data.length != 0) {
+        if (userData) {
+          if (likesData.data.find((e) => e === userData._id)) {
+            setButtonActive(true);
+          } else {
+            setButtonActive(false);
+          }
+        }
+        // if (likesData.data.find((e) => e === userData._id)) {
+        //   setButtonActive(true)
+        // }
+      }
+    }
+  }, [likesData]);
+
+  //#endregion useEffects
   return (
     <>
-      <section className="image-single-post">
-        <div className="row">
-        <div className="col-12 inner-image">
-              <img
-                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                alt="this is card image"
-              />
-            </div>
-            <div className="col-12 auther-single-div">
-              <div className="box-img">
-                <img
-                  src="https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png"
-                  alt="this is auther image"
-                />
-                <h2>
-                  <em>Hassan Ali Hassan</em>
-                </h2>
+      {loading ? (
+        <SinglePostLoading />
+      ) : (
+        post && (
+          <section className="image-single-post">
+            <div className="row">
+              <div className="col-12 inner-image">
+                {post.imageUrl ? (
+                  <>
+                    <img src={post.imageUrl} alt="this is card image" />
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                      alt="this is card image"
+                    />
+                  </>
+                )}
+              </div>
+              <div className="col-12 auther-single-div">
+                <div className="box-img">
+                  {post.auther.image ? (
+                    <img
+                      src={post.auther && post.auther.image}
+                      alt="this is auther image"
+                    />
+                  ) : (
+                    <img
+                      src="https://static-00.iconduck.com/assets.00/profile-circle-icon-256x256-cm91gqm2.png"
+                      alt="this is auther image"
+                    />
+                  )}
+
+                  <h2>
+                    <em>{post.auther.name}</em>
+                  </h2>
+                </div>
               </div>
             </div>
-        </div>
-        <Wrapper>
-          <div className="row ">
-            
-            <div className="col-12 post-content">
-              <h1 className="post-title">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
-              </h1>
-              <p className="post-subtitle"> 20 feb 2022</p>
-              <div className="post-reactive">
-                <h3>Give Us A Like ?</h3>
-                <button>
-                  <i className="fa-regular fa-heart" />5
-                </button>
-              </div>
-              <div className="post-badge">
-                <span className="badge badge-primary">#HTML</span>
-                <span className="badge badge-primary">#HTML</span>
-                <span className="badge badge-primary">#HTML</span>
-                <span className="badge badge-primary">#HTML</span>
-              </div>
-              <p className="post-description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </p>
-              <br />
-              <p className="post-description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </p>
-              <br />
-              <p className="post-description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </p>
-              <p className="post-description">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </p>
-            </div>
-            <div className="col-lg-8 col-md-12 post-comment">
-              <h3 className="comments-title">Comments</h3>
-              <CommentComponent />
-              <CommentComponent />
-              <CommentComponent />
-            </div>
-            <div className="col-lg-8 col-md-12 post-comment-form">
-              <h3 className="comments-title">Leave a Comment</h3>
-              <p className="comment-note">
-                Your email address will not be published, Required field ware
-                marked *
-              </p>
-              <form>
-                <div className="form-group">
-                  <label>Artical Reating</label>
-                  <div className="rating-star">
-                    {[...Array(5)].map((star, index) => {
-                      return (
-                        <i
-                          key={index}
-                          className="fa fa-star"
-                          onClick={() => handleStarClick(index + 1)}
-                        />
-                      );
-                    })}
+            <Wrapper>
+              <div className="row ">
+                <div className="col-12 post-content mb-5">
+                  <h1 className="post-title">{post.title}</h1>
+                  <p className="post-subtitle">{formatDate(post.createdAt)}</p>
+                  <div className="post-badge">
+                    Tages : {""}
+                    {post.tages &&
+                      post.tages.length != 0 &&
+                      post.tages.map((tag, index) => (
+                        <span className="badge badge-primary" key={index}>
+                          {tag}
+                        </span>
+                      ))}
                   </div>
+                  <p className="post-description">
+                    {/* {} */}
+                    <MyComponent htmlString={post.description} />
+                  </p>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="name">Name *</label>
-                  <input type="text" className="form-control" id="name" />
+                <hr />
+                <div className="col-lg-8 col-md-12 post-comment-form">
+                  <div className="post-reactive">
+                    <h3>Give Us A Like ?</h3>
+                    {likesLoading || toggleLikesLoading ? (
+                      <>
+                        <CustomLoader />
+                      </>
+                    ) : (
+                      <>
+                        {likes && (
+                          <>
+                            <button
+                              onClick={toggleLike}
+                              className={`${bottonActive && "active"}`}
+                            >
+                              <i className="fa-regular fa-heart" />
+                              {likes.length ? likes.length : 0}
+                            </button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <CommentFrom postId={id} onFinshed={getPostCommnets} />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="emial">Emial *</label>
-                  <input type="email" className="form-control" id="emial" />
+                <div className="col-lg-8 col-md-12 post-comment">
+                  <h3 className="comments-title">Comments</h3>
+                  {commnetLoading ? (
+                    <>
+                      <CommentComponentLoading />
+                      <CommentComponentLoading />
+                    </>
+                  ) : (
+                    <>
+                      {comment && comment.length != 0 ? (
+                        comment.map((comment, index) => (
+                          <CommentComponent key={index} data={comment} />
+                        ))
+                      ) : (
+                        <p>No Commnets</p>
+                      )}
+                    </>
+                  )}
                 </div>
-                <div className="form-group">
-                  <label htmlFor="comment">Comment *</label>
-                  <textarea className="form-control" id="comment" rows={5} />
-                </div>
-                <div className="form-group">
-                  <button type="submit" className="btn">
-                    Submitte
-                  </button>
-                </div>
-              </form>
+              </div>
+            </Wrapper>
+          </section>
+        )
+      )}
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Log in to continue</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h3 className="text-center mb-4">
+            Login / register to open some cool features !
+          </h3>
+          <div className="row">
+            <div className="col-6 m-auto">
+              <Link to={"/login"} className="d-block btn btn-primary">
+                Login
+              </Link>
             </div>
           </div>
-        </Wrapper>
-      </section>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
+
+const MyComponent = ({ htmlString }) => {
+  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+};

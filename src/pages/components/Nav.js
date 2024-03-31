@@ -18,7 +18,8 @@ export default function Nav() {
       const foundUser = JSON.parse(userToken);
       const decoded = jwtDecode(foundUser.token);
       const expireDate = decoded.exp * 1000;
-      // foundUser.token && checkTokenAndDeleteUser(expireDate);
+      console.log(foundUser.expiresIn);
+      foundUser.token && checkTokenAndDeleteUser(foundUser.expiresIn);
       setUser(foundUser);
     }
   }, []);
@@ -51,8 +52,15 @@ export default function Nav() {
             <Link to={"/"}>Blogs</Link>
           </li>
           <li className="logo">
-            {" "}
-            <Link to={"/profile"}>My Blog</Link>
+            {user ? (
+              <>
+                <Link to={"/profile"}>My Profile</Link>
+              </>
+            ) : (
+              <>
+                <Link to={"/login"}>My Blog</Link>
+              </>
+            )}
           </li>
           <li>
             {" "}
